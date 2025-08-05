@@ -7,48 +7,46 @@ describe('ConfirmationDialogComponent', () => {
     isOpen: true,
     onAccept: jest.fn(),
     onClose: jest.fn(),
-    title: 'Confirmación',
+    title: 'Confirmar acción',
     labels: {
       closeButton: 'Cancelar',
       acceptButton: 'Aceptar',
     },
-    children: <p>¿Estás seguro?</p>,
+    children: <div>¿Estás seguro?</div>,
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render dialog with title and children when open', () => {
+  it('renderiza título, contenido y botones cuando está abierto', () => {
     render(<ConfirmationDialogComponent {...defaultProps} />);
 
-    expect(screen.getByText('Confirmación')).toBeInTheDocument();
-    expect(screen.getByText('¿Estás seguro?')).toBeInTheDocument();
-    expect(screen.getByText('Cancelar')).toBeInTheDocument();
-    expect(screen.getByText('Aceptar')).toBeInTheDocument();
+    expect(screen.getByText('Confirmar acción')).not.toBeNull();
+    expect(screen.getByText('¿Estás seguro?')).not.toBeNull();
+    expect(screen.getByText('Cancelar')).not.toBeNull();
+    expect(screen.getByText('Aceptar')).not.toBeNull();
   });
 
-  it('should not render dialog when isOpen is false', () => {
-    render(<ConfirmationDialogComponent {...defaultProps} isOpen={false} />);
-
-    expect(screen.queryByText('Confirmación')).not.toBeInTheDocument();
-  });
-
-  it('should call onClose when clicking Cancelar', () => {
+  it('llama a onClose al hacer clic en cancelar', () => {
     render(<ConfirmationDialogComponent {...defaultProps} />);
 
     fireEvent.click(screen.getByText('Cancelar'));
-
     expect(defaultProps.onClose).toHaveBeenCalledTimes(1);
     expect(defaultProps.onAccept).not.toHaveBeenCalled();
   });
 
-  it('should call onAccept and then onClose when clicking Aceptar', () => {
+  it('llama a onAccept y luego a onClose al hacer clic en aceptar', () => {
     render(<ConfirmationDialogComponent {...defaultProps} />);
 
     fireEvent.click(screen.getByText('Aceptar'));
-
     expect(defaultProps.onAccept).toHaveBeenCalledTimes(1);
     expect(defaultProps.onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('no se renderiza si isOpen es false', () => {
+    render(<ConfirmationDialogComponent {...defaultProps} isOpen={false} />);
+
+    expect(screen.queryByText('Confirmar acción')).toBeNull();
   });
 });
